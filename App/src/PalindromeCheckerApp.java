@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -6,7 +8,7 @@ public class PalindromeCheckerApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("--- UC5: Stack-Based Palindrome Checker ---");
+        System.out.println("--- UC6: Queue + Stack Palindrome Checker ---");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
@@ -20,33 +22,34 @@ public class PalindromeCheckerApp {
     }
 
     /**
-     * UC5: Validates palindrome using the LIFO property of a Stack.
+     * UC6: Validates palindrome by comparing FIFO (Queue) vs LIFO (Stack).
      */
     public static boolean isPalindrome(String str) {
         if (str == null || str.isEmpty()) return true;
 
-        // Use a stack to store characters
+        // Initialize Data Structures
+        Queue<Character> queue = new LinkedList<>();
         Stack<Character> stack = new Stack<>();
 
-        // Normalize the string (case-insensitive)
+        // Normalize for case-insensitivity
         String cleanedStr = str.toLowerCase();
 
-        // Step 1: Push all characters onto the stack
+        // Step 1: Populate both structures
         for (int i = 0; i < cleanedStr.length(); i++) {
-            stack.push(cleanedStr.charAt(i));
+            char ch = cleanedStr.charAt(i);
+            queue.add(ch);   // Enqueue (FIFO)
+            stack.push(ch);  // Push (LIFO)
         }
 
-        // Step 2: Pop characters and compare with original string
-        // Since Stack is LIFO, popping gives the string in reverse order
-        for (int i = 0; i < cleanedStr.length(); i++) {
-            char originalChar = cleanedStr.charAt(i);
-            char reversedChar = stack.pop();
-
-            if (originalChar != reversedChar) {
-                return false; // Mismatch found
+        // Step 2: Compare Dequeue vs Pop
+        // Queue.poll() retrieves the first character entered
+        // Stack.pop() retrieves the last character entered
+        while (!queue.isEmpty()) {
+            if (!queue.poll().equals(stack.pop())) {
+                return false; // Mismatch between original order and reverse order
             }
         }
 
-        return true; // All characters matched
+        return true;
     }
 }
