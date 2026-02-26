@@ -1,45 +1,52 @@
 import java.util.Scanner;
+import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("--- Palindrome Checker (Character Array) ---");
+        System.out.println("--- UC5: Stack-Based Palindrome Checker ---");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
         if (isPalindrome(input)) {
-            System.out.println("\"" + input + "\" is a palindrome.");
+            System.out.println("Result: \"" + input + "\" is a palindrome.");
         } else {
-            System.out.println("\"" + input + "\" is NOT a palindrome.");
+            System.out.println("Result: \"" + input + "\" is NOT a palindrome.");
         }
 
         scanner.close();
     }
 
     /**
-     * UC4: Validates palindrome using a char array and two-pointer technique.
+     * UC5: Validates palindrome using the LIFO property of a Stack.
      */
     public static boolean isPalindrome(String str) {
-        if (str == null) return false;
+        if (str == null || str.isEmpty()) return true;
 
-        // Convert string to char array for index-based access
-        char[] charArray = str.toLowerCase().toCharArray();
+        // Use a stack to store characters
+        Stack<Character> stack = new Stack<>();
 
-        // Two-pointer initialization
-        int start = 0;
-        int end = charArray.length - 1;
+        // Normalize the string (case-insensitive)
+        String cleanedStr = str.toLowerCase();
 
-        // Compare characters until pointers meet in the middle
-        while (start < end) {
-            if (charArray[start] != charArray[end]) {
-                return false; // Mismatch found
-            }
-            start++; // Move forward
-            end--;   // Move backward
+        // Step 1: Push all characters onto the stack
+        for (int i = 0; i < cleanedStr.length(); i++) {
+            stack.push(cleanedStr.charAt(i));
         }
 
-        return true; // No mismatches found
+        // Step 2: Pop characters and compare with original string
+        // Since Stack is LIFO, popping gives the string in reverse order
+        for (int i = 0; i < cleanedStr.length(); i++) {
+            char originalChar = cleanedStr.charAt(i);
+            char reversedChar = stack.pop();
+
+            if (originalChar != reversedChar) {
+                return false; // Mismatch found
+            }
+        }
+
+        return true; // All characters matched
     }
 }
