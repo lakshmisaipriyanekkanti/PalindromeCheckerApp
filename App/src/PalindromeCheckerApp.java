@@ -1,58 +1,45 @@
-/**
- * =====================================================
- * MAIN CLASS - UseCase3PalindromeCheckerApp
- * =====================================================
- *
- * Use Case 3: Reverse String Based Palindrome Check
- *
- * Description:
- * This class checks whether a string is a palindrome
- * by reversing the string and comparing it with
- * the original value.
- *
- * At this stage, the application:
- * - Iterates the string in reverse order
- * - Builds a reversed version
- * - Compares original and reversed strings
- * - Displays the validation result
- *
- * This introduces transformation-based validation.
- *
- * @author Developer
- * @version 3.0
- */
-
 import java.util.Scanner;
 
 public class PalindromeCheckerApp {
 
-    /**
-     * Application entry point for UC3.
-     * @param args Command-line arguments
-     */
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
 
-// Step 1: Get input from user
+        System.out.println("--- Palindrome Checker (Character Array) ---");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-// Step 2: Reverse string using loop
-        String reversed = "";
-
-// Iterate from last character to first
-        for (int i = input.length() - 1; i >= 0; i--) {
-            reversed = reversed + input.charAt(i);
-        }
-
-// Step 3: Compare original and reversed
-        if (input.equals(reversed)) {
-            System.out.println("Result: The given string is a Palindrome.");
+        if (isPalindrome(input)) {
+            System.out.println("\"" + input + "\" is a palindrome.");
         } else {
-            System.out.println("Result: The given string is NOT a Palindrome.");
+            System.out.println("\"" + input + "\" is NOT a palindrome.");
         }
 
         scanner.close();
+    }
+
+    /**
+     * UC4: Validates palindrome using a char array and two-pointer technique.
+     */
+    public static boolean isPalindrome(String str) {
+        if (str == null) return false;
+
+        // Convert string to char array for index-based access
+        char[] charArray = str.toLowerCase().toCharArray();
+
+        // Two-pointer initialization
+        int start = 0;
+        int end = charArray.length - 1;
+
+        // Compare characters until pointers meet in the middle
+        while (start < end) {
+            if (charArray[start] != charArray[end]) {
+                return false; // Mismatch found
+            }
+            start++; // Move forward
+            end--;   // Move backward
+        }
+
+        return true; // No mismatches found
     }
 }
