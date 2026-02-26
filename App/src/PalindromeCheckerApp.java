@@ -1,14 +1,13 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("--- UC6: Queue + Stack Palindrome Checker ---");
+        System.out.println("--- UC7: Deque-Based Optimized Palindrome Checker ---");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
@@ -22,31 +21,27 @@ public class PalindromeCheckerApp {
     }
 
     /**
-     * UC6: Validates palindrome by comparing FIFO (Queue) vs LIFO (Stack).
+     * UC7: Validates palindrome by comparing front and rear of a Deque.
      */
     public static boolean isPalindrome(String str) {
         if (str == null || str.isEmpty()) return true;
 
-        // Initialize Data Structures
-        Queue<Character> queue = new LinkedList<>();
-        Stack<Character> stack = new Stack<>();
+        // ArrayDeque is generally faster than LinkedList for Deque operations
+        Deque<Character> deque = new ArrayDeque<>();
 
-        // Normalize for case-insensitivity
+        // Normalize for case-insensitivity and load the Deque
         String cleanedStr = str.toLowerCase();
-
-        // Step 1: Populate both structures
-        for (int i = 0; i < cleanedStr.length(); i++) {
-            char ch = cleanedStr.charAt(i);
-            queue.add(ch);   // Enqueue (FIFO)
-            stack.push(ch);  // Push (LIFO)
+        for (char ch : cleanedStr.toCharArray()) {
+            deque.addLast(ch);
         }
 
-        // Step 2: Compare Dequeue vs Pop
-        // Queue.poll() retrieves the first character entered
-        // Stack.pop() retrieves the last character entered
-        while (!queue.isEmpty()) {
-            if (!queue.poll().equals(stack.pop())) {
-                return false; // Mismatch between original order and reverse order
+        // Compare until there is 0 or 1 character left
+        while (deque.size() > 1) {
+            char front = deque.removeFirst();
+            char rear = deque.removeLast();
+
+            if (front != rear) {
+                return false; // Mismatch found
             }
         }
 
