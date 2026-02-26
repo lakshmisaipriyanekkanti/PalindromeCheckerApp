@@ -5,41 +5,46 @@ public class PalindromeCheckerApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("--- UC9: Recursive Palindrome Checker ---");
-        System.out.print("Enter a string: ");
+        System.out.println("--- UC10: Case & Space Insensitive Palindrome ---");
+        System.out.println("Supports phrases like: 'A man a plan a canal Panama'");
+        System.out.print("Enter a string or phrase: ");
         String input = scanner.nextLine();
 
-        // Normalize string: Remove non-alphanumeric and convert to lowercase
-        String cleanedStr = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-
-        if (isPalindrome(cleanedStr, 0, cleanedStr.length() - 1)) {
-            System.out.println("Result: \"" + input + "\" is a palindrome.");
+        if (isPalindrome(input)) {
+            System.out.println("Result: Success! It is a palindrome.");
         } else {
-            System.out.println("Result: \"" + input + "\" is NOT a palindrome.");
+            System.out.println("Result: Failed. It is NOT a palindrome.");
         }
 
         scanner.close();
     }
 
     /**
-     * UC9: Validates palindrome using recursion.
-     * @param str The string to check.
-     * @param start The current left index.
-     * @param end The current right index.
-     * @return true if the substring is a palindrome.
+     * UC10: Preprocesses the string to ignore case and non-alphanumeric characters.
      */
-    public static boolean isPalindrome(String str, int start, int end) {
-        // Base Case 1: If there is 0 or 1 character left, it's a palindrome
-        if (start >= end) {
-            return true;
+    public static boolean isPalindrome(String str) {
+        if (str == null) return false;
+
+        // Step 1: Normalization using Regex
+        // [^a-zA-Z0-9] means "anything that is NOT a letter or a number"
+        // replaceAll replaces those matches with an empty string ""
+        String cleanedStr = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        // Edge case: empty string after cleaning
+        if (cleanedStr.isEmpty()) return true;
+
+        // Step 2: Apply Two-Pointer logic for efficiency
+        int left = 0;
+        int right = cleanedStr.length() - 1;
+
+        while (left < right) {
+            if (cleanedStr.charAt(left) != cleanedStr.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
         }
 
-        // Base Case 2: If characters at start and end don't match
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
-        }
-
-        // Recursive Step: Check the inner substring (shrink the window)
-        return isPalindrome(str, start + 1, end - 1);
+        return true;
     }
 }
